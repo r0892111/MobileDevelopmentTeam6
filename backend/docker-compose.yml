@@ -1,48 +1,39 @@
 services:
-  local:
-    build:
-      context: ./app
-      dockerfile: docker/Dockerfile.local
-    ports:
-      - "3000:3000"
-    restart: no
-    image: backend-local
-    pull_policy: never
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     volumes:
-      - ./app:/app
-      - /app/node_modules
-    # env_file:
-    #   - ./app/env/.env.local
-    # environment:
-    #   NODE_ENV: development
+      - pgdata:/var/lib/postgresql/data
     networks:
-      - local-network
-    # depends_on:
-    #   postgres:
-    #     condition: service_healthy
+      backend:
+        ipv4_address: ${POSTGRES_IP}
 
-  # prod:
-    # build:
-    #   context: ./app
-    #   dockerfile: ./docker/Dockerfile.prod
-    # ports:
-    #   - "3000:3000"
-    # restart: no
-    # image: backend-prod
-    # pull_policy: never
-    # volumes:
-    #   - ./app:/app
-    #   - /app/node_modules
-    # env_file:
-    #   - ./app/env/.env.local
-    # environment:
-    #   NODE_ENV: production
-    # networks:
-    #   - local-network
-    # depends_on:
-    #   postgres:
-    #     condition: service_healthy
+  api:
+    build:
+      context: .                 # Root of the project
+      dockerfile: app/docker/Dockerfile  # Path to Dockerfile
+    env_file: app/env/.env       # Path to the .env file
+    environment:
+      DATABASE_URL: ${DOCKER_DATABASE_URL}
+    ports:
+      - "${API_PORT}:3000"
+    depends_on:
+      - postgres
+    networks:
+      backend:
+        ipv4_address: ${API_IP}
+    volumes:
+      - ./prisma:/prisma
+      - ./app:/app/app
+
+volumes:
+  pgdata:
 
 networks:
-  local-network:
-    driver: bridge
+  backend:
+    ipam:
+      config:
+        - subnet: ${SUBNET}

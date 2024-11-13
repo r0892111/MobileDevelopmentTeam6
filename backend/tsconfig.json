@@ -4,6 +4,10 @@
     "transpileOnly": true,
     "require": ["tsconfig-paths/register"]
   },
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext"
+  },
   "include": ["app/**/*.ts"],
   "exclude": ["dist", "node_modules"]
 }
