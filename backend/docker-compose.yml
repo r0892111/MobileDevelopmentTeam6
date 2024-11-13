@@ -13,8 +13,9 @@ services:
 
   api:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: .                 # Root of the project
+      dockerfile: app/docker/Dockerfile  # Path to Dockerfile
+    env_file: app/env/.env       # Path to the .env file
     environment:
       DATABASE_URL: ${DOCKER_DATABASE_URL}
     ports:
@@ -26,6 +27,7 @@ services:
         ipv4_address: ${API_IP}
     volumes:
       - ./prisma:/prisma
+      - ./app:/app/app
 
 volumes:
   pgdata:
