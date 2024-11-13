@@ -69,13 +69,14 @@ export default function Login() {
       )}
 
       <View style={styles.buttonRow}>
+      <TouchableOpacity style={styles.switchbtn} onPress={toggleRegistration}>
+          <Text style={styles.buttonText}>{reg ? "Switch to Login" : "Switch to Register"}</Text>
+        </TouchableOpacity>
         <TouchableOpacity style={styles.logregbtn} onPress={handleLogin}>
           <Text style={styles.buttonText}>{reg ? "Register" : "Log In"}</Text>
         </TouchableOpacity>
         
-        <TouchableOpacity style={styles.switchbtn} onPress={toggleRegistration}>
-          <Text style={styles.buttonText}>{reg ? "Switch to Login" : "Switch to Register"}</Text>
-        </TouchableOpacity>
+        
       </View>
     </View>
   );
