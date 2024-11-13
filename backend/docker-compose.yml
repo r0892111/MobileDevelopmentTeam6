@@ -15,9 +15,9 @@ services:
 
   api:
     build:
-      context: .                 # Root of the project
-      dockerfile: app/docker/Dockerfile  # Path to Dockerfile
-    env_file: app/env/.env       # Path to the .env file
+      context: .
+      dockerfile: app/docker/Dockerfile
+    env_file: app/env/.env
     environment:
       DATABASE_URL: ${DOCKER_DATABASE_URL}
     ports:
