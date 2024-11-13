@@ -10,6 +10,8 @@ services:
     networks:
       backend:
         ipv4_address: ${POSTGRES_IP}
+    ports:
+      - "${POSTGRES_PORT}:5432"
 
   api:
     build:

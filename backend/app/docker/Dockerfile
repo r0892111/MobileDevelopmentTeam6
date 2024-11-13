@@ -26,11 +26,14 @@ FROM node:18 AS production
 
 WORKDIR /app
 
-# Copy all files from the builder stage to the production image
+# Copy node_modules and app from builder stage to production image
 COPY --from=builder /app /app
 
-# Expose the application port
-EXPOSE 3000
+# Install Prisma CLI to run migrations
+RUN npm install -g prisma
 
-# Start the application
-CMD ["ts-node-dev", "--respawn", "--transpile-only", "-r", "tsconfig-paths/register", "app/app.ts"]
+# Expose the application port
+EXPOSE 3010
+
+# Start the application with schema push command
+CMD ["sh", "-c", "npx prisma migrate deploy && npm run dev"]
