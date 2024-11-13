@@ -1,7 +1,7 @@
 // components/RestaurantCard.tsx
 import React from 'react';
 import { Text, View, Image, StyleSheet } from 'react-native';
-import { Restaurant } from '../models/restaurants';
+import { Restaurant } from '../models/Restaurant';
 
 interface RestaurantCardProps {
   restaurant: Restaurant;
