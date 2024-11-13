@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "lib": ["ESNext"],
-    "moduleResolution": "node",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "removeComments": true,

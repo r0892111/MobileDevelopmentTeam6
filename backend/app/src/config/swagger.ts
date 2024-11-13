@@ -6,8 +6,8 @@ export const setupSwagger = (ffy: FastifyInstance): void => {
   ffy.register(fastifySwagger, {
     openapi: {
       info: {
-        title: 'Moboo API',
-        description: "API de l'application Moboo",
+        title: 'API',
+        description: "application API",
         version: '0.1.0',
       },
       servers: [{ url: 'http://localhost:3000' }],
@@ -24,7 +24,7 @@ export const setupSwagger = (ffy: FastifyInstance): void => {
   });
 
   ffy.register(fastifySwaggerUi, {
-    routePrefix: '/docs',
+    routePrefix: '/documentation',
     staticCSP: true,
     transformSpecification: (swaggerObject) => swaggerObject,
   });
