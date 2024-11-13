@@ -1,22 +1,31 @@
-import { Text, View, /* @tutinfo Import <CODE>StyleSheet</CODE> to define styles. */ StyleSheet } from 'react-native';
+// app/index.tsx
+import React from 'react';
+import { View, FlatList, StyleSheet } from 'react-native';
 
-export default function Index() {
+// Importing the mock data and model
+import { restaurants } from '../../data/mockRestaurants';
+import { Restaurant } from '../../models/restaurants';
+
+// Importing the RestaurantCard component
+import RestaurantCard from '../../components/restaurantCard';
+
+const Index: React.FC = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Home screen</Text>
+      <FlatList
+        data={restaurants}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => <RestaurantCard restaurant={item} />}
+      />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    /* @tutinfo Add the value of <CODE>backgroundColor</CODE> property with <CODE>'#25292e'</CODE>.*/
     backgroundColor: '#25292e',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  text: {
-    color: '#fff',
   },
 });
+
+export default Index;
