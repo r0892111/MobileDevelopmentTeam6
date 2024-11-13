@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.base.json",
+  "ts-node": {
+    "transpileOnly": true,
+    "require": ["tsconfig-paths/register"]
+  },
+  "include": ["app/**/*.ts"],
+  "exclude": ["dist", "node_modules"]
+}

@@ -1,0 +1,48 @@
+services:
+  local:
+    build:
+      context: ./app
+      dockerfile: docker/Dockerfile.local
+    ports:
+      - "3000:3000"
+    restart: no
+    image: backend-local
+    pull_policy: never
+    volumes:
+      - ./app:/app
+      - /app/node_modules
+    # env_file:
+    #   - ./app/env/.env.local
+    # environment:
+    #   NODE_ENV: development
+    networks:
+      - local-network
+    # depends_on:
+    #   postgres:
+    #     condition: service_healthy
+
+  # prod:
+    # build:
+    #   context: ./app
+    #   dockerfile: ./docker/Dockerfile.prod
+    # ports:
+    #   - "3000:3000"
+    # restart: no
+    # image: backend-prod
+    # pull_policy: never
+    # volumes:
+    #   - ./app:/app
+    #   - /app/node_modules
+    # env_file:
+    #   - ./app/env/.env.local
+    # environment:
+    #   NODE_ENV: production
+    # networks:
+    #   - local-network
+    # depends_on:
+    #   postgres:
+    #     condition: service_healthy
+
+networks:
+  local-network:
+    driver: bridge
