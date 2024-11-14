@@ -10,7 +10,7 @@ const Handler = async (
 
   const restaurant = await getRestaurantById(restaurantId);
 
-  return res.success(HttpStatusCode.ok, { ...restaurant });
+  return res.success(HttpStatusCode.ok, restaurant);
 };
 
 export default Handler;

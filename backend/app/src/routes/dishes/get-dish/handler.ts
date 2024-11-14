@@ -10,7 +10,7 @@ const handler = async (
 
   const dish = await getDishById(dishId);
 
-  return res.success(HttpStatusCode.ok, { ...dish });
+  return res.success(HttpStatusCode.ok, dish);
 };
 
 export default handler;

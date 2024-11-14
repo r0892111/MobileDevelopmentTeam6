@@ -23,7 +23,7 @@ model Restaurant {
   description String
   address  String
   imageUrl String
-  rating   Float @default(4)
+  rating   Float @default(5)
   cost     Int
 
   dishes   Dish[]

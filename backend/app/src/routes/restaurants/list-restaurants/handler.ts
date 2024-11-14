@@ -12,10 +12,10 @@ const handler = async (
 
   if (includeTotalCount) {
     const totalCount = await countRestaurants();
-    return res.success(HttpStatusCode.ok, { ...restaurants }, { totalCount, pagination })
+    return res.success(HttpStatusCode.ok, restaurants, { totalCount, pagination })
   }
 
-  return res.success(HttpStatusCode.ok, { ...restaurants }, { pagination });
+  return res.success(HttpStatusCode.ok, restaurants, { pagination });
 };
 
 export default handler;
