@@ -1,4 +1,4 @@
-interface SchemaType {
+export interface SchemaType {
   type: 'object';
   properties: Record<string, any>;
   readonly required: readonly string[];

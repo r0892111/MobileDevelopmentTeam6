@@ -51,10 +51,13 @@ export const createRestaurant = handleError(createRestaurantFn);
 
 const listRestaurantsQuery = async (
   pageForQuery?: PaginationQuery,
-  where?: Prisma.RestaurantWhereInput): Promise<Restaurant[]> =>
+  include?: Prisma.RestaurantInclude,
+  where?: Prisma.RestaurantWhereInput
+): Promise<Restaurant[]> =>
   prismaInstance.restaurant.findMany({
     ...(pageForQuery && pageForQuery),
-    where,
+    include: { ...include },
+    where: { ...where },
     orderBy: { id: 'desc' },
   });
 
@@ -62,13 +65,14 @@ export type ListRestaurantsQueryType = Prisma.PromiseReturnType<typeof listResta
 
 const listRestaurantsFn = async (
   pagination?: Pagination,
+  include?: Prisma.RestaurantInclude,
   where?: Prisma.RestaurantWhereInput,
 ): Promise<ListRestaurantsQueryType> => {
   const paginationQuery = await paginationForComplexQuery(pagination, () =>
     countRestaurantsAboveId(Number(pagination?.findId) || undefined, where),
   );
 
-  const result = await listRestaurantsQuery(paginationQuery, where);
+  const result = await listRestaurantsQuery(paginationQuery, include, where);
   return result;
 };
 
