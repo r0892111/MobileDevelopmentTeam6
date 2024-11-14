@@ -1,32 +1,30 @@
-// src/types/fastify.d.ts
 import 'fastify';
+import { JwtPayload } from 'jsonwebtoken';
 import { HttpStatusCode } from '@enums/http-status-enums';
 import { ErrorsEnum } from '@enums/errors-enums';
 
-import { ProcessEnvData } from './env-entity';
-
 declare module 'fastify' {
-  interface FastifyInstance {
-    config: ProcessEnvData;
+  interface FastifyRequest {
+    user?: string | JwtPayload;
   }
 
   interface FastifyReply {
     /**
-     * Envoie une réponse de succès avec le code HTTP spécifié.
+     * Sends a success response with the specified HTTP code.
      *
-     * @param statusCode - Le code HTTP de la réponse.
-     * @param data - Les données à envoyer dans la réponse.
-     * @param meta - Les métadonnées optionnelles pour la réponse.
+     * @param statusCode - The HTTP code of the response.
+     * @param data - The data to send in the response.
+     * @param meta - Optional metadata for the response.
      */
     success<T>(statusCode: HttpStatusCode, data: T, meta?: Record<string, unknown>): void;
 
     /**
-     * Lève une erreur API avec le code HTTP spécifié.
+     * Throws an API error with the specified HTTP code.
      *
-     * @param message - Le message d'erreur descriptif.
-     * @param httpCode - Le code HTTP à retourner.
-     * @param statusCode - Le code de statut spécifique à l'application.
-     * @param details - Détails supplémentaires sur l'erreur.
+     * @param message - The descriptive error message.
+     * @param httpCode - The HTTP code to return.
+     * @param statusCode - The application-specific status code.
+     * @param details - Additional details about the error.
      */
     error(
       message: string,

@@ -1,5 +1,7 @@
+import path from 'node:path';
 
 import fastify from 'fastify';
+import dotenv from 'dotenv';
 import ajvFormats from 'ajv-formats';
 import Ajv from 'ajv';
 import { router as apiRoutes } from '@routes/index';
@@ -11,6 +13,8 @@ import { setupRateLimit } from '@config/rate-limit';
 import { setupHelmet } from '@config/helmet';
 import { setupDecorators } from '@config/decorators/setupDecorators';
 import { setupCors } from '@config/cors';
+
+dotenv.config({ path: path.resolve(__dirname, './env/.env') });
 
 export const ffy = fastify({ logger: true });
 

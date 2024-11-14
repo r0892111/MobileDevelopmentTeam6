@@ -1,10 +1,23 @@
-// import { FastifyReply, FastifyRequest } from 'fastify';
-// import { HttpStatusCode } from '@enums/http-status-enums';
-// import { ErrorsEnum } from '@enums/errors-enums';
+import { FastifyReply, FastifyRequest } from 'fastify';
+import JWTService from '@services/jwt-service';
+import ApiError from '@libs/error-management/api-error';
+import { ErrorsEnum } from '@enums/errors-enums';
 
-// export async function isAuthenticated(req: FastifyRequest, res: FastifyReply): Promise<void> {
-//   console.log(req.isAuthenticated());
-//   if (!req.isAuthenticated()) {
-//     res.error('You need to be register', HttpStatusCode.forbidden, ErrorsEnum.unauthorized);
-//   }
-// }
+const jwtService = new JWTService();
+
+export const authMiddleware = async (request: FastifyRequest, _reply: FastifyReply): Promise<void> => {
+  const authHeader = request.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    throw new ApiError('Authorization token is missing or malformed', 401, ErrorsEnum.unauthorized);
+  }
+
+  const token = authHeader.split(' ')[1];
+  const { decoded, tokenExpired } = jwtService.verifyToken(token);
+
+  if (tokenExpired) {
+    throw new ApiError('Token expired', 401, ErrorsEnum.unauthorized);
+  }
+
+  // eslint-disable-next-line no-param-reassign
+  request.user = decoded;
+};
