@@ -24,9 +24,9 @@ export default function Login() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>
-        {reg ? 'Register for a new account!' : 'Login to your account to order!'}
+        {reg ? 'Register for a new account' : 'Login to your account to order'}
       </Text>
-      
+
       {reg && (
         <TextInput
           style={styles.input}
@@ -36,7 +36,7 @@ export default function Login() {
           onChangeText={setFullName}
         />
       )}
-      
+
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -55,7 +55,7 @@ export default function Login() {
         secureTextEntry
         autoCapitalize="none"
       />
-      
+
       {reg && (
         <TextInput
           style={styles.input}
@@ -69,14 +69,13 @@ export default function Login() {
       )}
 
       <View style={styles.buttonRow}>
-      <TouchableOpacity style={styles.switchbtn} onPress={toggleRegistration}>
+        <TouchableOpacity style={styles.switchbtn} onPress={toggleRegistration}>
           <Text style={styles.buttonText}>{reg ? "Switch to Login" : "Switch to Register"}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.logregbtn} onPress={handleLogin}>
           <Text style={styles.buttonText}>{reg ? "Register" : "Log In"}</Text>
         </TouchableOpacity>
-        
-        
+
       </View>
     </View>
   );
@@ -117,17 +116,20 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     borderRadius: 5,
     alignItems: 'center',
+    justifyContent: 'center'
   },
-  switchbtn:{
+  switchbtn: {
     flex: 1,
     backgroundColor: '#ff0000',
     paddingVertical: 10,
     marginHorizontal: 5,
     borderRadius: 5,
     alignItems: 'center',
+    justifyContent: 'center'
   },
   buttonText: {
     color: '#fff',
     fontSize: 16,
+    textAlign: 'center',
   },
 });

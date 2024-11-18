@@ -4,8 +4,6 @@ import { View, FlatList, TouchableOpacity, Text, StyleSheet } from 'react-native
 import { Link } from 'expo-router';
 import { restaurants } from '../../data/restaurants';
 
-
-
 export default function RestaurantList() {
   return (
     <View style={styles.container}>
