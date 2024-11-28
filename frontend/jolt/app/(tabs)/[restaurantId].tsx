@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, FlatList, StyleSheet, Button } from 'react-native';
+import { View, Text, FlatList, StyleSheet, Button, TouchableOpacity } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { restaurants } from '../../data/restaurants';
 import { MenuItemsData } from '../../data/menuItems';
@@ -8,8 +8,6 @@ import { CartItem } from '../../models/CartItem';
 
 export default function RestaurantMenu() {
   const { restaurantId } = useLocalSearchParams(); // Retrieve the dynamic parameter
-
-  
 
   // Convert restaurantId to a number for comparison
   const numericRestaurantId = Number(restaurantId);
@@ -24,6 +22,13 @@ export default function RestaurantMenu() {
 
   // Cart state
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [expandedItems, setExpandedItems] = useState<number[]>([]); // Track expanded descriptions
+
+  const toggleDescription = (itemId: number) => {
+    setExpandedItems(prev =>
+      prev.includes(itemId) ? prev.filter(id => id !== itemId) : [...prev, itemId]
+    );
+  };
 
   const addToCart = (item: MenuItem) => {
     setCart(prevCart => {
@@ -42,6 +47,7 @@ export default function RestaurantMenu() {
       return [...prevCart, { ...item, quantity: 1 }];
     });
   };
+
   const totalPrice = cart.reduce(
     (total, cartItem) => total + cartItem.price * cartItem.quantity,
     0
@@ -67,7 +73,7 @@ export default function RestaurantMenu() {
           : cartItem
       );
     });
-  }
+  };
 
   if (!restaurant) {
     return (
@@ -84,48 +90,57 @@ export default function RestaurantMenu() {
       <Text style={styles.subtitle}>Menu</Text>
       <FlatList
         data={restaurantMenuItems}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => (
           <View style={styles.menuItem}>
             <Text style={styles.itemName}>{item.name}</Text>
-            <Text style={styles.itemPrice}>{item.price}</Text>
-            <Text>{item.description}</Text>
-            <Text>{item.imageUrl}</Text>
+            <Text style={styles.itemPrice}>${item.price.toFixed(2)}</Text>
+
+            {/* Toggleable description */}
+            <TouchableOpacity onPress={() => toggleDescription(item.id)}>
+              <Text style={styles.toggleDescription}>
+                {expandedItems.includes(item.id) ? 'Hide Description' : 'Show Description'}
+              </Text>
+            </TouchableOpacity>
+            {expandedItems.includes(item.id) && (
+              <Text style={styles.itemDescription}>{item.description}</Text>
+            )}
+
             <Button title="Add to cart" onPress={() => addToCart(item)} />
           </View>
         )}
       />
       <View style={styles.cart}>
-  <Text style={styles.cartTitle}>Cart</Text>
-  {cart.map(cartItem => (
-    <View key={cartItem.id} style={styles.cartItemContainer}>
-      <Text style={styles.cartItem}>
-        {cartItem.name} - {cartItem.quantity} x {cartItem.price} ={' '}
-        {(cartItem.quantity * cartItem.price).toFixed(2)}
-      </Text>
-    <View style={styles.removebtn} >
-      <Button title="Remove" onPress={() => removeFromCart(cartItem.id)} />
-
-    </View>
-    </View>
-  ))}
-  <Text style={styles.cartItem}>Total: {totalPrice.toFixed(2)}</Text>
-</View>
-
+        <Text style={styles.cartTitle}>Cart</Text>
+        {cart.map(cartItem => (
+          <View key={cartItem.id} style={styles.cartItemContainer}>
+            <Text style={styles.cartItem}>
+              {cartItem.name} - {cartItem.quantity} x ${cartItem.price.toFixed(2)} ={' '}
+              ${(cartItem.quantity * cartItem.price).toFixed(2)}
+            </Text>
+            <View style={styles.removebtn}>
+              <Button title="Remove" onPress={() => removeFromCart(cartItem.id)} />
+            </View>
+          </View>
+        ))}
+        <Text style={styles.cartTotal}>Total: ${totalPrice.toFixed(2)}</Text>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  toggleDescription: {
+    color: '#ffb74d',
+    fontSize: 14,
+    marginTop: 5,
+    marginBottom: 5,
+  },
   removebtn: {
     backgroundColor: '#ff5252',
     borderRadius: 5,
     padding: 5,
     marginLeft: 10,
-  },
-  removebtnText: {
-    color: '#fff',
-    fontSize: 14,
   },
   cartItemContainer: {
     flexDirection: 'row',
@@ -205,21 +220,4 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 15,
   },
-  button: {
-    backgroundColor: '#ff5252',
-    paddingVertical: 10,
-    borderRadius: 5,
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
 });
-
-
-
-
-
