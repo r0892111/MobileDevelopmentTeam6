@@ -1,14 +1,16 @@
-// app/(tabs)/[restaurantId].tsx
-import React from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, FlatList, StyleSheet, Button } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { restaurants } from '../../data/restaurants';
-import { menuItems } from '../../data/menuItems';
+import { MenuItemsData } from '../../data/menuItems';
 import { MenuItem } from '../../models/MenuItem';
+import { CartItem } from '../../models/CartItem';
 
 export default function RestaurantMenu() {
-  const { restaurantId } = useLocalSearchParams();  // Retrieve the dynamic parameter
+  const { restaurantId } = useLocalSearchParams(); // Retrieve the dynamic parameter
+
   
+
   // Convert restaurantId to a number for comparison
   const numericRestaurantId = Number(restaurantId);
 
@@ -16,9 +18,56 @@ export default function RestaurantMenu() {
   const restaurant = restaurants.find(r => r.id === numericRestaurantId);
 
   // Filter menu items that belong to this restaurant
-  const restaurantMenuItems: MenuItem[] = menuItems.filter(
+  const restaurantMenuItems: MenuItem[] = MenuItemsData.filter(
     item => item.restaurantId === numericRestaurantId
   );
+
+  // Cart state
+  const [cart, setCart] = useState<CartItem[]>([]);
+
+  const addToCart = (item: MenuItem) => {
+    setCart(prevCart => {
+      const existingItem = prevCart.find(cartItem => cartItem.id === item.id);
+
+      if (existingItem) {
+        // Update quantity if the item already exists
+        return prevCart.map(cartItem =>
+          cartItem.id === item.id
+            ? { ...cartItem, quantity: cartItem.quantity + 1 }
+            : cartItem
+        );
+      }
+
+      // Add new item to the cart
+      return [...prevCart, { ...item, quantity: 1 }];
+    });
+  };
+  const totalPrice = cart.reduce(
+    (total, cartItem) => total + cartItem.price * cartItem.quantity,
+    0
+  );
+
+  const removeFromCart = (itemId: number) => {
+    setCart(prevCart => {
+      const existingItem = prevCart.find(cartItem => cartItem.id === itemId);
+
+      if (!existingItem) {
+        return prevCart;
+      }
+
+      if (existingItem.quantity === 1) {
+        // Remove the item if the quantity is 1
+        return prevCart.filter(cartItem => cartItem.id !== itemId);
+      }
+
+      // Update quantity if the item already exists
+      return prevCart.map(cartItem =>
+        cartItem.id === itemId
+          ? { ...cartItem, quantity: cartItem.quantity - 1 }
+          : cartItem
+      );
+    });
+  }
 
   if (!restaurant) {
     return (
@@ -40,47 +89,137 @@ export default function RestaurantMenu() {
           <View style={styles.menuItem}>
             <Text style={styles.itemName}>{item.name}</Text>
             <Text style={styles.itemPrice}>{item.price}</Text>
+            <Text>{item.description}</Text>
+            <Text>{item.imageUrl}</Text>
+            <Button title="Add to cart" onPress={() => addToCart(item)} />
           </View>
         )}
       />
+      <View style={styles.cart}>
+  <Text style={styles.cartTitle}>Cart</Text>
+  {cart.map(cartItem => (
+    <View key={cartItem.id} style={styles.cartItemContainer}>
+      <Text style={styles.cartItem}>
+        {cartItem.name} - {cartItem.quantity} x {cartItem.price} ={' '}
+        {(cartItem.quantity * cartItem.price).toFixed(2)}
+      </Text>
+    <View style={styles.removebtn} >
+      <Button title="Remove" onPress={() => removeFromCart(cartItem.id)} />
+
+    </View>
+    </View>
+  ))}
+  <Text style={styles.cartItem}>Total: {totalPrice.toFixed(2)}</Text>
+</View>
+
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  removebtn: {
+    backgroundColor: '#ff5252',
+    borderRadius: 5,
+    padding: 5,
+    marginLeft: 10,
+  },
+  removebtnText: {
+    color: '#fff',
+    fontSize: 14,
+  },
+  cartItemContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 15,
+    backgroundColor: '#333',
+    borderRadius: 5,
+    padding: 10,
+  },
   container: {
     flex: 1,
-    backgroundColor: '#25292e',
+    backgroundColor: '#1e1e2e',
     padding: 20,
   },
   title: {
-    fontSize: 24,
-    color: '#fff',
+    fontSize: 28,
+    color: '#ffb74d',
+    fontWeight: 'bold',
     marginBottom: 10,
   },
   description: {
     fontSize: 16,
-    color: '#bbb',
+    color: '#cfd8dc',
     marginBottom: 20,
+    lineHeight: 22,
   },
   subtitle: {
-    fontSize: 18,
-    color: '#bbb',
-    marginBottom: 10,
+    fontSize: 20,
+    color: '#ffb74d',
+    marginBottom: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#444',
+    paddingBottom: 5,
   },
   menuItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 10,
-    borderBottomColor: '#444',
-    borderBottomWidth: 1,
+    backgroundColor: '#333',
+    borderRadius: 5,
+    padding: 15,
+    marginBottom: 10,
   },
   itemName: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 18,
+    fontWeight: 'bold',
   },
   itemPrice: {
+    color: '#90caf9',
+    fontSize: 16,
+    marginVertical: 5,
+  },
+  itemDescription: {
     color: '#bbb',
+    fontSize: 14,
+    marginBottom: 10,
+    lineHeight: 20,
+  },
+  cart: {
+    marginTop: 20,
+    paddingTop: 10,
+    borderTopColor: '#444',
+    borderTopWidth: 1,
+  },
+  cartTitle: {
+    color: '#ffb74d',
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  cartItem: {
+    color: '#fff',
     fontSize: 16,
   },
+  cartTotal: {
+    color: '#ffb74d',
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginTop: 15,
+  },
+  button: {
+    backgroundColor: '#ff5252',
+    paddingVertical: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
 });
+
+
+
+
+

@@ -1,10 +1,16 @@
 // models/restaurant.ts
+
+
+
 export interface Restaurant {
   id: number;
   name: string;
-  image: string;
+  imageUrl: string;
   description: string;
   rating: number;
-  priceLevel: string;
-  categories: string[];
+  cost: number; // Updated type to match provided data
+  categories?: string[]; // Optional if categories are not always present
+  address: string;
+  createdAt: string;
+  updatedAt: string;
 }
