@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, FlatList, StyleSheet, Button, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, StyleSheet, Button } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { restaurants } from '../../data/restaurants';
 import { MenuItemsData } from '../../data/menuItems';
@@ -22,13 +22,6 @@ export default function RestaurantMenu() {
 
   // Cart state
   const [cart, setCart] = useState<CartItem[]>([]);
-  const [expandedItems, setExpandedItems] = useState<number[]>([]); // Track expanded descriptions
-
-  const toggleDescription = (itemId: number) => {
-    setExpandedItems(prev =>
-      prev.includes(itemId) ? prev.filter(id => id !== itemId) : [...prev, itemId]
-    );
-  };
 
   const addToCart = (item: MenuItem) => {
     setCart(prevCart => {
@@ -75,6 +68,10 @@ export default function RestaurantMenu() {
     });
   };
 
+  const handleCheckout = () => {
+    console.log('Proceeding to checkout:', cart);
+  };
+
   if (!restaurant) {
     return (
       <View style={styles.container}>
@@ -90,54 +87,56 @@ export default function RestaurantMenu() {
       <Text style={styles.subtitle}>Menu</Text>
       <FlatList
         data={restaurantMenuItems}
-        keyExtractor={item => item.id.toString()}
+        keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <View style={styles.menuItem}>
             <Text style={styles.itemName}>{item.name}</Text>
             <Text style={styles.itemPrice}>${item.price.toFixed(2)}</Text>
-
-            {/* Toggleable description */}
-            <TouchableOpacity onPress={() => toggleDescription(item.id)}>
-              <Text style={styles.toggleDescription}>
-                {expandedItems.includes(item.id) ? 'Hide Description' : 'Show Description'}
-              </Text>
-            </TouchableOpacity>
-            {expandedItems.includes(item.id) && (
-              <Text style={styles.itemDescription}>{item.description}</Text>
-            )}
-
             <Button title="Add to cart" onPress={() => addToCart(item)} />
           </View>
         )}
       />
       <View style={styles.cart}>
         <Text style={styles.cartTitle}>Cart</Text>
-        {cart.map(cartItem => (
-          <View key={cartItem.id} style={styles.cartItemContainer}>
-            <Text style={styles.cartItem}>
-              {cartItem.name} - {cartItem.quantity} x ${cartItem.price.toFixed(2)} ={' '}
-              ${(cartItem.quantity * cartItem.price).toFixed(2)}
-            </Text>
-            <View style={styles.removebtn}>
-              <Button title="Remove" onPress={() => removeFromCart(cartItem.id)} />
-            </View>
-          </View>
-        ))}
+        <View style={styles.cartContent}>
+          <FlatList
+            data={cart}
+            keyExtractor={(cartItem) => cartItem.id.toString()}
+            renderItem={({ item }) => (
+              <View style={styles.cartItemContainer}>
+                <Text style={styles.cartItem}>
+                  {item.name} - {item.quantity} x ${item.price.toFixed(2)} ={' '}
+                  ${(item.quantity * item.price).toFixed(2)}
+                </Text>
+                <View style={styles.removebtn}>
+                  <Button
+                    color="red"
+                    title="Remove"
+                    onPress={() => removeFromCart(item.id)}
+                  />
+                </View>
+              </View>
+            )}
+          />
+        </View>
         <Text style={styles.cartTotal}>Total: ${totalPrice.toFixed(2)}</Text>
+
+        {totalPrice > 0 && (
+          <View>
+            <Button title="Checkout" onPress={handleCheckout} />
+          </View>
+        )}
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  toggleDescription: {
-    color: '#ffb74d',
-    fontSize: 14,
-    marginTop: 5,
-    marginBottom: 5,
+  cartContent: {
+    maxHeight: 200, // Limit cart height
+    overflow: 'hidden', // Clip content beyond the box
   },
   removebtn: {
-    backgroundColor: '#ff5252',
     borderRadius: 5,
     padding: 5,
     marginLeft: 10,
@@ -191,12 +190,6 @@ const styles = StyleSheet.create({
     color: '#90caf9',
     fontSize: 16,
     marginVertical: 5,
-  },
-  itemDescription: {
-    color: '#bbb',
-    fontSize: 14,
-    marginBottom: 10,
-    lineHeight: 20,
   },
   cart: {
     marginTop: 20,
