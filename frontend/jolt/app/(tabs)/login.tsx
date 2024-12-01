@@ -1,24 +1,33 @@
 import React, { useState } from 'react';
-import { Text, View, StyleSheet, TextInput, Button, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { useRouter } from 'expo-router';
+import { useAuth } from '../appContext';
 
 export default function Login() {
   const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [fullName, setFullName] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
   const [reg, setReg] = useState(false);
+  const router = useRouter();
+  const { login, register } = useAuth();
 
-  const handleLogin = () => {
-    if (reg) {
-      console.log('Full Name:', fullName);
-      console.log('Confirm Password:', confirmPassword);
+  const handleAuth = async () => {
+    try {
+      if (reg) {
+        await register(username, email, password);
+        alert('Registration successful!');
+      } else {
+        await login(email, password);
+        alert('Login successful!');
+      }
+      router.replace('/index');
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        alert('An unexpected error occurred.');
+      }
     }
-    console.log('Email:', email);
-    console.log('Password:', password);
-  };
-
-  const toggleRegistration = () => {
-    setReg(!reg);
   };
 
   return (
@@ -26,17 +35,16 @@ export default function Login() {
       <Text style={styles.title}>
         {reg ? 'Register for a new account' : 'Login to your account to order'}
       </Text>
-
-      {reg && (
+      {reg === true && (
         <TextInput
           style={styles.input}
-          placeholder="Full Name"
+          placeholder="Username"
           placeholderTextColor="#b0b0b0"
-          value={fullName}
-          onChangeText={setFullName}
+          value={username}
+          onChangeText={setUsername}
+          autoCapitalize="none"
         />
       )}
-
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -56,26 +64,17 @@ export default function Login() {
         autoCapitalize="none"
       />
 
-      {reg && (
-        <TextInput
-          style={styles.input}
-          placeholder="Confirm Password"
-          placeholderTextColor="#b0b0b0"
-          value={confirmPassword}
-          onChangeText={setConfirmPassword}
-          secureTextEntry
-          autoCapitalize="none"
-        />
-      )}
-
       <View style={styles.buttonRow}>
-        <TouchableOpacity style={styles.switchbtn} onPress={toggleRegistration}>
-          <Text style={styles.buttonText}>{reg ? "Switch to Login" : "Switch to Register"}</Text>
+        <TouchableOpacity style={styles.switchbtn} onPress={() => setReg(!reg)}>
+          <Text style={styles.buttonText}>
+            {reg ? 'Switch to Login' : 'Switch to Register'}
+          </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.logregbtn} onPress={handleLogin}>
-          <Text style={styles.buttonText}>{reg ? "Register" : "Log In"}</Text>
+        <TouchableOpacity style={styles.logregbtn} onPress={handleAuth}>
+          <Text style={styles.buttonText}>
+            {reg ? 'Register' : 'Log In'}
+          </Text>
         </TouchableOpacity>
-
       </View>
     </View>
   );
@@ -116,7 +115,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     borderRadius: 5,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   switchbtn: {
     flex: 1,
@@ -125,7 +124,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     borderRadius: 5,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   buttonText: {
     color: '#fff',

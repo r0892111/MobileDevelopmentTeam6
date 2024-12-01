@@ -20,7 +20,14 @@ const handler = async (
   }
 
   const token = jwtService.signToken({ userId: user.id }, '15d'); // on va mettre 15 jours dans le cadre du projet
-  return res.success(HttpStatusCode.ok, { token });
+  return res.success(HttpStatusCode.ok, {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    token,
+    createdAt: user.createdAt,
+    updatedAt: user.updatedAt
+  });
 };
 
 export default handler;
