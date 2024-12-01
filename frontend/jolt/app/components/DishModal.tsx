@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   View,
   Text,
@@ -7,9 +7,9 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { Dish } from '../types/Dish';
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { Dish } from "@/models/Dish";
 
 interface DishModalProps {
   dish: Dish | null;
@@ -41,8 +41,14 @@ const DishModal: React.FC<DishModalProps> = ({
             <Text style={styles.description}>{dish.description}</Text>
 
             <View style={styles.quantityContainer}>
-              <TouchableOpacity onPress={() => onQuantityChange(Math.max(1, quantity - 1))}>
-                <Ionicons name="remove-circle-outline" size={32} color="#5fa8ff" />
+              <TouchableOpacity
+                onPress={() => onQuantityChange(Math.max(1, quantity - 1))}
+              >
+                <Ionicons
+                  name="remove-circle-outline"
+                  size={32}
+                  color="#5fa8ff"
+                />
               </TouchableOpacity>
               <Text style={styles.quantity}>{quantity}</Text>
               <TouchableOpacity onPress={() => onQuantityChange(quantity + 1)}>
@@ -69,69 +75,69 @@ const DishModal: React.FC<DishModalProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
+    justifyContent: "center",
+    alignItems: "center",
   },
   content: {
-    backgroundColor: '#1b243b',
+    backgroundColor: "#1b243b",
     borderRadius: 12,
     padding: 20,
-    width: '90%',
-    maxHeight: '80%',
+    width: "90%",
+    maxHeight: "80%",
   },
   image: {
-    width: '100%',
+    width: "100%",
     height: 200,
     borderRadius: 8,
     marginBottom: 15,
   },
   name: {
     fontSize: 22,
-    fontWeight: 'bold',
-    color: '#e0e6f8',
+    fontWeight: "bold",
+    color: "#e0e6f8",
     marginBottom: 10,
   },
   price: {
     fontSize: 20,
-    color: '#5fa8ff',
+    color: "#5fa8ff",
     marginBottom: 10,
   },
   description: {
     fontSize: 16,
-    color: '#a0a8c0',
+    color: "#a0a8c0",
     marginBottom: 20,
   },
   quantityContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     marginBottom: 20,
   },
   quantity: {
     fontSize: 20,
-    color: '#e0e6f8',
+    color: "#e0e6f8",
     marginHorizontal: 15,
   },
   addButton: {
-    backgroundColor: '#3b5bdb',
+    backgroundColor: "#3b5bdb",
     paddingVertical: 12,
     borderRadius: 8,
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 10,
   },
   addButtonText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
   },
   closeButton: {
-    backgroundColor: '#444',
+    backgroundColor: "#444",
     paddingVertical: 12,
     borderRadius: 8,
-    alignItems: 'center',
+    alignItems: "center",
   },
   closeButtonText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
   },
 });

@@ -1,14 +1,17 @@
-import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { Restaurant } from '@/models/Restaurant';
+import React from "react";
+import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { Restaurant } from "@/models/Restaurant";
 
 interface RestaurantInfoProps {
   restaurant: Restaurant;
   onViewMap: () => void;
 }
 
-const RestaurantInfo: React.FC<RestaurantInfoProps> = ({ restaurant, onViewMap }) => {
+const RestaurantInfo: React.FC<RestaurantInfoProps> = ({
+  restaurant,
+  onViewMap,
+}) => {
   return (
     <View style={styles.container}>
       <Image source={{ uri: restaurant.imageUrl }} style={styles.image} />
@@ -17,7 +20,10 @@ const RestaurantInfo: React.FC<RestaurantInfoProps> = ({ restaurant, onViewMap }
         <View style={styles.details}>
           <Ionicons name="star" size={16} color="#FFD700" />
           <Text style={styles.rating}>{restaurant.rating}</Text>
-          <Text style={styles.cost}>{' • '}{'$'.repeat(restaurant.cost)}</Text>
+          <Text style={styles.cost}>
+            {" • "}
+            {"$".repeat(restaurant.cost)}
+          </Text>
         </View>
         <Text style={styles.description}>{restaurant.description}</Text>
         <TouchableOpacity style={styles.address} onPress={onViewMap}>
@@ -34,7 +40,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   image: {
-    width: '100%',
+    width: "100%",
     height: 200,
   },
   info: {
@@ -42,36 +48,36 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 24,
-    fontWeight: 'bold',
-    color: '#e0e6f8',
+    fontWeight: "bold",
+    color: "#e0e6f8",
     marginBottom: 5,
   },
   details: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 5,
   },
   rating: {
-    color: '#e0e6f8',
+    color: "#e0e6f8",
     fontSize: 16,
     marginLeft: 5,
   },
   cost: {
-    color: '#a0a8c0',
+    color: "#a0a8c0",
     fontSize: 16,
     marginLeft: 5,
   },
   description: {
     fontSize: 14,
-    color: '#a0a8c0',
+    color: "#a0a8c0",
     marginBottom: 10,
   },
   address: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   addressText: {
-    color: '#5fa8ff',
+    color: "#5fa8ff",
     fontSize: 14,
     marginLeft: 5,
   },

@@ -1,14 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ScrollView, ActivityIndicator, Modal, Text } from 'react-native';
-import { useLocalSearchParams } from 'expo-router';
-import { Restaurant } from '../types/Restaurant';
-import { Dish } from '../types/Dish';
-import RestaurantInfo from '../components/RestaurantInfo';
-import DishList from '../components/DishList';
-import DishModal from '../components/DishModal';
-import CartBar from '../components/CartBar';
-import CartModal from '../components/CartModal';
-import BackButton from '../components/BackButton';
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  ActivityIndicator,
+  Text,
+} from "react-native";
+import { useLocalSearchParams } from "expo-router";
+import RestaurantInfo from "../components/RestaurantInfo";
+import DishList from "../components/DishList";
+import DishModal from "../components/DishModal";
+import CartBar from "../components/CartBar";
+import CartModal from "../components/CartModal";
+import BackButton from "../components/BackButton";
+import { Restaurant } from "@/models/Restaurant";
+import { Dish } from "@/models/Dish";
 
 const RestaurantScreen: React.FC = () => {
   const { restaurantId } = useLocalSearchParams<{ restaurantId: string }>();
@@ -38,11 +44,11 @@ const RestaurantScreen: React.FC = () => {
         if (foundRestaurant) {
           setRestaurant(foundRestaurant);
         } else {
-          setError('Restaurant not found.');
+          setError("Restaurant not found.");
         }
       } catch (err) {
-        console.error('Error fetching restaurant:', err);
-        setError('Failed to load restaurant details.');
+        console.error("Error fetching restaurant:", err);
+        setError("Failed to load restaurant details.");
       } finally {
         setLoading(false);
       }
@@ -101,7 +107,7 @@ const RestaurantScreen: React.FC = () => {
   if (error || !restaurant) {
     return (
       <View style={styles.container}>
-        <Text style={styles.errorText}>{error || 'Restaurant not found.'}</Text>
+        <Text style={styles.errorText}>{error || "Restaurant not found."}</Text>
       </View>
     );
   }
@@ -112,7 +118,7 @@ const RestaurantScreen: React.FC = () => {
       <ScrollView>
         <RestaurantInfo
           restaurant={restaurant}
-          onViewMap={() => console.log('Open map modal')}
+          onViewMap={() => console.log("Open map modal")}
         />
         <DishList dishes={restaurant.dishes} onDishSelect={handleDishSelect} />
       </ScrollView>
@@ -137,7 +143,7 @@ const RestaurantScreen: React.FC = () => {
           onUpdateQuantity={handleUpdateQuantity}
           onRemoveItem={handleRemoveFromCart}
           onClose={() => setCartModalVisible(false)}
-          onCheckout={() => console.log('Checkout')}
+          onCheckout={() => console.log("Checkout")}
         />
       )}
     </View>
@@ -147,23 +153,23 @@ const RestaurantScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#12172b',
+    backgroundColor: "#12172b",
   },
   loaderContainer: {
     flex: 1,
-    backgroundColor: '#12172b',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "#12172b",
+    justifyContent: "center",
+    alignItems: "center",
   },
   loaderText: {
     marginTop: 10,
-    color: '#a0a8c0',
+    color: "#a0a8c0",
     fontSize: 16,
   },
   errorText: {
-    color: '#ff6b6b',
+    color: "#ff6b6b",
     fontSize: 18,
-    textAlign: 'center',
+    textAlign: "center",
     marginTop: 20,
   },
 });

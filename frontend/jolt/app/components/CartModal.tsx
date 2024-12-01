@@ -9,12 +9,7 @@ import {
   Modal,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { Dish } from "../types/Dish";
-
-interface CartItem {
-  dish: Dish;
-  quantity: number;
-}
+import { CartItem } from "@/models/CartItem";
 
 interface CartModalProps {
   cartItems: CartItem[];
@@ -87,7 +82,10 @@ const CartModal: React.FC<CartModalProps> = ({
           </ScrollView>
           <View style={styles.footer}>
             <Text style={styles.total}>Total: ${totalPrice.toFixed(2)}</Text>
-            <TouchableOpacity style={styles.checkoutButton} onPress={onCheckout}>
+            <TouchableOpacity
+              style={styles.checkoutButton}
+              onPress={onCheckout}
+            >
               <Text style={styles.checkoutText}>Checkout</Text>
             </TouchableOpacity>
           </View>

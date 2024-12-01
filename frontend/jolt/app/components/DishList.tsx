@@ -1,6 +1,6 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import { Dish } from '../types/Dish';
+import { Dish } from "@/models/Dish";
+import React from "react";
+import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 
 interface DishListProps {
   dishes: Dish[];
@@ -37,8 +37,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   card: {
-    flexDirection: 'row',
-    backgroundColor: '#1b243b',
+    flexDirection: "row",
+    backgroundColor: "#1b243b",
     borderRadius: 12,
     padding: 15,
     marginBottom: 15,
@@ -49,18 +49,18 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#e0e6f8',
+    fontWeight: "bold",
+    color: "#e0e6f8",
     marginBottom: 5,
   },
   price: {
     fontSize: 16,
-    color: '#5fa8ff',
+    color: "#5fa8ff",
     marginBottom: 5,
   },
   description: {
     fontSize: 14,
-    color: '#a0a8c0',
+    color: "#a0a8c0",
   },
   image: {
     width: 80,

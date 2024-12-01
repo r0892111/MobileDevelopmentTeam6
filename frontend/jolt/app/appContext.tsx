@@ -1,11 +1,12 @@
-import React, { createContext, useState, useContext, ReactNode, useMemo, useCallback } from 'react';
-
-// Define types for user data
-interface User {
-  id: string;
-  name: string;
-  email: string;
-}
+import { User } from "@/models/User";
+import React, {
+  createContext,
+  useState,
+  useContext,
+  ReactNode,
+  useMemo,
+  useCallback,
+} from "react";
 
 interface AppContextProps {
   isAuthenticated: boolean;
@@ -27,15 +28,15 @@ const API_URL = "https://dao4gdmtoorfh8se.thomasott.fr";
 // Provider component
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [username, setUsername] = useState<string>('');
+  const [username, setUsername] = useState<string>("");
   const [users, setUsers] = useState<User[]>([]);
 
   const login = useCallback(async (email: string, password: string) => {
     try {
       const response = await fetch(`${API_URL}/users/login`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, password }),
       });
@@ -46,7 +47,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUsername(data.data.name);
         setIsAuthenticated(true);
       } else {
-        throw new Error(data.error.message || 'Login failed');
+        throw new Error(data.error.message || "Login failed");
       }
     } catch (error) {
       console.error(error);
@@ -54,33 +55,36 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  const register = useCallback(async (name: string, email: string, password: string) => {
-    try {
-      const response = await fetch(`${API_URL}/users/register`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name, email, password }),
-      });
+  const register = useCallback(
+    async (name: string, email: string, password: string) => {
+      try {
+        const response = await fetch(`${API_URL}/users/register`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ name, email, password }),
+        });
 
-      const data = await response.json();
+        const data = await response.json();
 
-      if (response.ok) {
-        setUsername(data.data.name);
-        setIsAuthenticated(true);
-      } else {
-        throw new Error(data.error.message || 'Registration failed');
+        if (response.ok) {
+          setUsername(data.data.name);
+          setIsAuthenticated(true);
+        } else {
+          throw new Error(data.error.message || "Registration failed");
+        }
+      } catch (error) {
+        console.error(error);
+        throw error;
       }
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
-  }, []);
+    },
+    []
+  );
 
   const logout = useCallback(() => {
     setIsAuthenticated(false);
-    setUsername('');
+    setUsername("");
   }, []);
 
   const contextValue = useMemo(
@@ -97,14 +101,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     [isAuthenticated, username, users, login, register, logout]
   );
 
-  return <AppContext.Provider value={contextValue}>{children}</AppContext.Provider>;
+  return (
+    <AppContext.Provider value={contextValue}>{children}</AppContext.Provider>
+  );
 };
 
 // Custom hook to use the AppContext
 export const useAuth = () => {
   const context = useContext(AppContext);
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };

@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React from "react";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
 interface CartBarProps {
   itemCount: number;
@@ -7,7 +7,11 @@ interface CartBarProps {
   onPress: () => void;
 }
 
-const CartBar: React.FC<CartBarProps> = ({ itemCount, totalPrice, onPress }) => {
+const CartBar: React.FC<CartBarProps> = ({
+  itemCount,
+  totalPrice,
+  onPress,
+}) => {
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       <Text style={styles.text}>
@@ -19,18 +23,18 @@ const CartBar: React.FC<CartBarProps> = ({ itemCount, totalPrice, onPress }) => 
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#3b5bdb',
+    backgroundColor: "#3b5bdb",
     padding: 15,
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'absolute',
+    alignItems: "center",
+    justifyContent: "center",
+    position: "absolute",
     bottom: 0,
-    width: '100%',
+    width: "100%",
   },
   text: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 });
 

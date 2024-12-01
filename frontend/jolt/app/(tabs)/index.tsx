@@ -1,7 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { View, FlatList, TouchableOpacity, Text, StyleSheet, Image, ActivityIndicator } from 'react-native';
-import { Link } from 'expo-router';
-import { withAuth } from '../withAuth';
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  FlatList,
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  Image,
+  ActivityIndicator,
+} from "react-native";
+import { Link } from "expo-router";
+import { withAuth } from "../withAuth";
 
 interface Restaurant {
   id: number;
@@ -20,13 +28,15 @@ function RestaurantList() {
   useEffect(() => {
     const fetchRestaurants = async () => {
       try {
-        const response = await fetch('https://dao4gdmtoorfh8se.thomasott.fr/restaurants');
+        const response = await fetch(
+          "https://dao4gdmtoorfh8se.thomasott.fr/restaurants"
+        );
         const data = await response.json();
         const fetchedRestaurants: Restaurant[] = data.data;
         setRestaurants(fetchedRestaurants);
       } catch (err) {
-        console.error('Error fetching data:', err);
-        setError('Failed to load restaurants');
+        console.error("Error fetching data:", err);
+        setError("Failed to load restaurants");
       } finally {
         setLoading(false);
       }
@@ -61,18 +71,21 @@ function RestaurantList() {
           <TouchableOpacity style={styles.card}>
             <Link
               href={{
-                pathname: '/screens/[restaurantId]',
+                pathname: "/screens/[restaurantId]",
                 params: { restaurantId: item.id },
               }}
               style={styles.link}
             >
-              <Image source={{ uri: item.imageUrl }} style={styles.restaurantImage} />
+              <Image
+                source={{ uri: item.imageUrl }}
+                style={styles.restaurantImage}
+              />
               <View style={styles.cardContent}>
                 <Text style={styles.restaurantName}>{item.name}</Text>
                 <View style={styles.detailsRow}>
                   <Text style={styles.rating}>⭐ {item.rating}</Text>
                   <Text style={styles.cost}>
-                    {Array.from({ length: item.cost }, () => '$').join('')}
+                    {Array.from({ length: item.cost }, () => "$").join("")}
                   </Text>
                 </View>
                 <Text style={styles.description} numberOfLines={2}>
@@ -90,38 +103,38 @@ function RestaurantList() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#12172b',
+    backgroundColor: "#12172b",
     paddingHorizontal: 15,
     paddingTop: 20,
   },
   loaderContainer: {
     flex: 1,
-    backgroundColor: '#12172b',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "#12172b",
+    justifyContent: "center",
+    alignItems: "center",
   },
   loaderText: {
     marginTop: 10,
-    color: '#a0a8c0',
+    color: "#a0a8c0",
     fontSize: 16,
   },
   card: {
-    backgroundColor: '#1b243b',
+    backgroundColor: "#1b243b",
     borderRadius: 12,
-    overflow: 'hidden',
+    overflow: "hidden",
     marginBottom: 20,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 5,
   },
   link: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   restaurantImage: {
-    width: '100%',
+    width: "100%",
     height: 150,
   },
   cardContent: {
@@ -129,34 +142,34 @@ const styles = StyleSheet.create({
   },
   restaurantName: {
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#e0e6f8',
+    fontWeight: "bold",
+    color: "#e0e6f8",
     marginBottom: 8,
   },
   detailsRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 8,
   },
   rating: {
-    color: '#ffd700',
+    color: "#ffd700",
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   cost: {
-    color: '#5fa8ff',
+    color: "#5fa8ff",
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   description: {
     fontSize: 14,
-    color: '#a0a8c0',
+    color: "#a0a8c0",
   },
   errorText: {
-    color: '#ff6b6b',
+    color: "#ff6b6b",
     fontSize: 18,
-    textAlign: 'center',
+    textAlign: "center",
     marginTop: 20,
   },
 });
