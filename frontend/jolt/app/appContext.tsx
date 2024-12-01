@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const data = await response.json();
 
       if (response.ok) {
-        setUsername(data.user.name);
+        setUsername('redboard');
         setIsAuthenticated(true);
       } else {
         throw new Error(data.message || 'Login failed');
@@ -67,7 +67,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const data = await response.json();
 
       if (response.ok) {
-        setUsername(data.user.name);
+        setUsername('redboard');
         setIsAuthenticated(true);
       } else {
         throw new Error(data.message || 'Registration failed');

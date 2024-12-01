@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, FlatList, TouchableOpacity, Text, StyleSheet, Image, ActivityIndicator } from 'react-native';
 import { Link } from 'expo-router';
+import { withAuth } from '../withAuth';
 
 interface Restaurant {
   id: number;
@@ -11,7 +12,7 @@ interface Restaurant {
   cost: number;
 }
 
-export default function RestaurantList() {
+function RestaurantList() {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -152,3 +153,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export default withAuth(RestaurantList);

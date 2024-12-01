@@ -3,6 +3,7 @@ import { View, Text, FlatList, StyleSheet, Button, ActivityIndicator } from 'rea
 import { useLocalSearchParams } from 'expo-router';
 import { MenuItem } from '../../models/MenuItem';
 import { CartItem } from '../../models/CartItem';
+import { withAuth } from '../withAuth';
 
 interface Restaurant {
   id: number;
@@ -22,7 +23,7 @@ interface Dish {
   description: string;
 }
 
-export default function RestaurantMenu() {
+function RestaurantMenu() {
   const { restaurantId } = useLocalSearchParams(); // Retrieve the dynamic parameter
   const numericRestaurantId = Number(restaurantId); // Convert restaurantId to a number for comparison
 
@@ -36,10 +37,10 @@ export default function RestaurantMenu() {
     const fetchRestaurantMenu = async (restaurantId: number) => {
       try {
         const url = `https://dao4gdmtoorfh8se.thomasott.fr/restaurants?includeDishes=true`;
-    
+
         const response = await fetch(url);
         const data = await response.json();
-    
+
         // Now access data.data to get the array of restaurants
         const restaurants = data.data || [];
 
@@ -61,7 +62,7 @@ export default function RestaurantMenu() {
         setLoading(false);
       }
     };
-    
+
     fetchRestaurantMenu(numericRestaurantId);
   }, [numericRestaurantId]);
 
@@ -231,3 +232,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export default withAuth(RestaurantMenu);

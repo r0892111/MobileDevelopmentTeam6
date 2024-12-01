@@ -35,15 +35,16 @@ export default function Login() {
       <Text style={styles.title}>
         {reg ? 'Register for a new account' : 'Login to your account to order'}
       </Text>
-
-      <TextInput
-        style={styles.input}
-        placeholder="Username"
-        placeholderTextColor="#b0b0b0"
-        value={username}
-        onChangeText={setUsername}
-        autoCapitalize="none"
-      />
+      {reg === true && (
+        <TextInput
+          style={styles.input}
+          placeholder="Username"
+          placeholderTextColor="#b0b0b0"
+          value={username}
+          onChangeText={setUsername}
+          autoCapitalize="none"
+        />
+      )}
       <TextInput
         style={styles.input}
         placeholder="Email"
