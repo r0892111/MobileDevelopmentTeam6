@@ -22,13 +22,10 @@ function RestaurantList() {
       try {
         const response = await fetch('https://dao4gdmtoorfh8se.thomasott.fr/restaurants');
         const data = await response.json();
-
-        // Access the "data" field from the response
-        const fetchedRestaurants: Restaurant[] = data.data;  // Now correctly accessing the array of restaurants
-
+        const fetchedRestaurants: Restaurant[] = data.data;
         setRestaurants(fetchedRestaurants);
       } catch (err) {
-        console.error("Error fetching data: ", err);
+        console.error('Error fetching data:', err);
         setError('Failed to load restaurants');
       } finally {
         setLoading(false);
@@ -40,8 +37,9 @@ function RestaurantList() {
 
   if (loading) {
     return (
-      <View style={styles.container}>
-        <ActivityIndicator size="large" color="#fff" />
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator size="large" color="#5fa8ff" />
+        <Text style={styles.loaderText}>Loading restaurants...</Text>
       </View>
     );
   }
@@ -60,26 +58,26 @@ function RestaurantList() {
         data={restaurants}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <TouchableOpacity style={styles.item}>
+          <TouchableOpacity style={styles.card}>
             <Link
               href={{
-                pathname: "/(tabs)/[restaurantId]",
+                pathname: '/(tabs)/[restaurantId]',
                 params: { restaurantId: item.id },
               }}
               style={styles.link}
             >
-              <Image source={{ uri: item.imageUrl }} style={styles.itemImage} />
-              <View style={styles.itemDetails}>
-                <View style={styles.itemTextContainer}>
-                  <Text style={styles.itemName}>{item.name}</Text>
-                  <Text style={styles.itemDescription} numberOfLines={2}>
-                    {item.description}
+              <Image source={{ uri: item.imageUrl }} style={styles.restaurantImage} />
+              <View style={styles.cardContent}>
+                <Text style={styles.restaurantName}>{item.name}</Text>
+                <View style={styles.detailsRow}>
+                  <Text style={styles.rating}>⭐ {item.rating}</Text>
+                  <Text style={styles.cost}>
+                    {Array.from({ length: item.cost }, () => '$').join('')}
                   </Text>
                 </View>
-                <View style={styles.infoContainer}>
-                  <Text style={styles.itemRating}>Rating: {item.rating}</Text>
-                  <Text style={styles.itemCost}>Cost: ${item.cost}</Text>
-                </View>
+                <Text style={styles.description} numberOfLines={2}>
+                  {item.description}
+                </Text>
               </View>
             </Link>
           </TouchableOpacity>
@@ -92,65 +90,74 @@ function RestaurantList() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#25292e',
-    padding: 15,
+    backgroundColor: '#12172b',
+    paddingHorizontal: 15,
+    paddingTop: 20,
   },
-  item: {
-    flexDirection: 'row',
+  loaderContainer: {
+    flex: 1,
+    backgroundColor: '#12172b',
+    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#3a3f47',
-    marginVertical: 8,
-    borderRadius: 8,
-    padding: 10,
+  },
+  loaderText: {
+    marginTop: 10,
+    color: '#a0a8c0',
+    fontSize: 16,
+  },
+  card: {
+    backgroundColor: '#1b243b',
+    borderRadius: 12,
+    overflow: 'hidden',
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 5,
   },
   link: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  restaurantImage: {
     width: '100%',
+    height: 150,
   },
-  itemImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 8,
-    marginRight: 15,
+  cardContent: {
+    padding: 15,
   },
-  itemDetails: {
-    flex: 1,
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  itemTextContainer: {
-    flex: 1,
-  },
-  itemName: {
-    color: '#fff',
-    fontSize: 20,
+  restaurantName: {
+    fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 5,
+    color: '#e0e6f8',
+    marginBottom: 8,
   },
-  itemDescription: {
-    color: '#ccc',
-    fontSize: 14,
-    marginBottom: 5,
+  detailsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
   },
-  infoContainer: {
-    alignItems: 'flex-end',
-  },
-  itemRating: {
+  rating: {
     color: '#ffd700',
     fontSize: 14,
-    marginBottom: 5,
+    fontWeight: '600',
   },
-  itemCost: {
-    color: '#00ff00',
-    fontSize: 16,
-    fontWeight: 'bold',
+  cost: {
+    color: '#5fa8ff',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  description: {
+    fontSize: 14,
+    color: '#a0a8c0',
   },
   errorText: {
-    color: '#ff0000',
+    color: '#ff6b6b',
     fontSize: 18,
     textAlign: 'center',
+    marginTop: 20,
   },
 });
 
