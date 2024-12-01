@@ -61,7 +61,7 @@ function RestaurantList() {
           <TouchableOpacity style={styles.card}>
             <Link
               href={{
-                pathname: '/(tabs)/[restaurantId]',
+                pathname: '/screens/[restaurantId]',
                 params: { restaurantId: item.id },
               }}
               style={styles.link}
