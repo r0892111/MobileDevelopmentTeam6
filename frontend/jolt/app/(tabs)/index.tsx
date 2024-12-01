@@ -1,9 +1,58 @@
-import React from 'react';
-import { View, FlatList, TouchableOpacity, Text, StyleSheet, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, FlatList, TouchableOpacity, Text, StyleSheet, Image, ActivityIndicator } from 'react-native';
 import { Link } from 'expo-router';
-import { restaurants } from '../../data/restaurants';
+
+interface Restaurant {
+  id: number;
+  name: string;
+  description: string;
+  imageUrl: string;
+  rating: number;
+  cost: number;
+}
 
 export default function RestaurantList() {
+  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchRestaurants = async () => {
+      try {
+        const response = await fetch('https://dao4gdmtoorfh8se.thomasott.fr/restaurants');
+        const data = await response.json();
+
+        // Access the "data" field from the response
+        const fetchedRestaurants: Restaurant[] = data.data;  // Now correctly accessing the array of restaurants
+
+        setRestaurants(fetchedRestaurants);
+      } catch (err) {
+        console.error("Error fetching data: ", err);
+        setError('Failed to load restaurants');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRestaurants();
+  }, []);
+
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="large" color="#fff" />
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.errorText}>{error}</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <FlatList
@@ -11,7 +60,6 @@ export default function RestaurantList() {
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <TouchableOpacity style={styles.item}>
-            {/* Navigate to dynamic route with pathname and params */}
             <Link
               href={{
                 pathname: "/(tabs)/[restaurantId]",
@@ -21,14 +69,12 @@ export default function RestaurantList() {
             >
               <Image source={{ uri: item.imageUrl }} style={styles.itemImage} />
               <View style={styles.itemDetails}>
-                {/* Left Side: Name and Description */}
                 <View style={styles.itemTextContainer}>
                   <Text style={styles.itemName}>{item.name}</Text>
                   <Text style={styles.itemDescription} numberOfLines={2}>
                     {item.description}
                   </Text>
                 </View>
-                {/* Right Side: Rating and Cost */}
                 <View style={styles.infoContainer}>
                   <Text style={styles.itemRating}>Rating: {item.rating}</Text>
                   <Text style={styles.itemCost}>Cost: ${item.cost}</Text>
@@ -99,5 +145,10 @@ const styles = StyleSheet.create({
     color: '#00ff00',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  errorText: {
+    color: '#ff0000',
+    fontSize: 18,
+    textAlign: 'center',
   },
 });
