@@ -6,8 +6,9 @@ export function withAuth(Component: React.ComponentType) {
   return function AuthenticatedComponent(props: any) {
     const { isAuthenticated } = useAuth();
 
+    // Comment when dev
     // if (!isAuthenticated) {
-    //   return <Redirect href="/login" />;
+    //   return <Redirect href="/screens/login" />;
     // }
 
     return <Component {...props} />;

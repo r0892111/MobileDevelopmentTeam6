@@ -27,7 +27,7 @@ export default function Login() {
         await login(email, password);
         alert("Login successful!");
       }
-      router.replace("/index");
+      router.replace("/");
     } catch (error: unknown) {
       if (error instanceof Error) {
         alert(error.message);
