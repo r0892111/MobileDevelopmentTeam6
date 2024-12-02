@@ -19,10 +19,10 @@ export default function ProfileScreen() {
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
-            {/* Nome do usuário */}
+            {/* Name */}
             <Text style={styles.username}>Hello, {username}!</Text>
 
-            {/* Secção de pedidos */}
+            {/* Orders*/}
             <View style={styles.ordersSection}>
                 <Text style={styles.ordersTitle}>Your Orders:</Text>
                 {orders.length === 0 ? (
@@ -39,7 +39,7 @@ export default function ProfileScreen() {
                 )}
             </View>
 
-            {/* Botão de Logout */}
+            {/* Logout */}
             <TouchableOpacity style={styles.button} onPress={handleLogout}>
                 <Text style={styles.buttonText}>Log Out</Text>
             </TouchableOpacity>
@@ -50,7 +50,7 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#1e2a47',  // Cor de fundo mais suave
+        backgroundColor: '#1e2a47',  
         alignItems: 'center',
         justifyContent: 'center',
         paddingHorizontal: 20,
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     },
     ordersSection: {
         width: '100%',
-        backgroundColor: '#2b3a53',  // Cor de fundo da seção de pedidos
+        backgroundColor: '#2b3a53',  
         padding: 15,
         borderRadius: 10,
         marginBottom: 30,
@@ -93,10 +93,10 @@ const styles = StyleSheet.create({
         fontWeight: '400',
     },
     delivered: {
-        color: '#32CD32',  // Verde para status 'Delivered'
+        color: '#32CD32',  
     },
     inProgress: {
-        color: '#FFD700',  // Amarelo para status 'In Progress'
+        color: '#FFD700',  
     },
     noOrdersText: {
         color: '#A9A9A9',
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     button: {
-        backgroundColor: '#FF6347',  // Cor de fundo do botão
+        backgroundColor: '#FF6347',  
         paddingVertical: 12,
         paddingHorizontal: 40,
         borderRadius: 30,
